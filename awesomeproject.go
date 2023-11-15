@@ -12,7 +12,7 @@ func main() {
 		serveRandomImage(w, r)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8000", nil)
 }
 
 func serveRandomImage(w http.ResponseWriter, r *http.Request) {
