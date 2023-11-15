@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-
-
 const imagesDirectory = "./images"
 const numImages = 30
 
@@ -48,6 +46,9 @@ func serveRandomImage(w http.ResponseWriter, r *http.Request) {
 	rand.Seed(time.Now().UnixNano())
 	randomImage := images[rand.Intn(len(images))]
 
+	// Set cache control headers
+	w.Header().Set("Cache-Control", "no-store, must-revalidate")
+
 	http.ServeFile(w, r, imagesDirectory+"/"+randomImage)
 }
 
@@ -78,6 +79,8 @@ func serveMultipleRandomImages(w http.ResponseWriter, r *http.Request, numImages
 		imageLinks = append(imageLinks, fmt.Sprintf("/images/%s", randomImage))
 	}
 
+	// Set cache control headers
+	w.Header().Set("Cache-Control", "no-store, must-revalidate")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf(`{"image_links": %s}`, toJSON(imageLinks))))
