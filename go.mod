@@ -1,3 +1,3 @@
 module awesomeProject
 
-go 1.3
+go 1.12
