@@ -1,13 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
-	"strconv"
 	"time"
 )
+
+
 
 const imagesDirectory = "./images"
 const numImages = 30
