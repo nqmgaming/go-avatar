@@ -50,6 +50,8 @@ func serveRandomImage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "no-store, must-revalidate")
 
 	http.ServeFile(w, r, imagesDirectory+"/"+randomImage)
+
+	http.HandleFunc("/images/", serveImage)
 }
 
 func serveMultipleRandomImages(w http.ResponseWriter, r *http.Request, numImages int) {
@@ -84,6 +86,12 @@ func serveMultipleRandomImages(w http.ResponseWriter, r *http.Request, numImages
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf(`{"image_links": %s}`, toJSON(imageLinks))))
+}
+
+// when call localhost:8000/images/1.png return image 1.png in folder images
+func serveImage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, r.URL.Path[1:])
+
 }
 
 func toJSON(data interface{}) string {
