@@ -16,27 +16,29 @@ func main() {
 }
 
 func serveRandomImage(w http.ResponseWriter, r *http.Request) {
-	files, err := ioutil.ReadDir("./images")
-	if err != nil {
-		http.Error(w, "Unable to read images directory", http.StatusInternalServerError)
-		return
-	}
+    files, err := ioutil.ReadDir("./images")
+    if err != nil {
+        http.Error(w, "Unable to read images directory", http.StatusInternalServerError)
+        return
+    }
 
-	// Filter out directories, only keep regular files
-	var images []string
-	for _, file := range files {
-		if !file.IsDir() {
-			images = append(images, file.Name())
-		}
-	}
+    // Filter out directories, only keep regular files
+    var images []string
+    for _, file := range files {
+        if !file.IsDir() {
+            images = append(images, file.Name())
+        }
+    }
 
-	if len(images) == 0 {
-		http.Error(w, "No images available", http.StatusNotFound)
-		return
-	}
+    if len(images) == 0 {
+        http.Error(w, "No images available", http.StatusNotFound)
+        return
+    }
 
-	rand.Seed(time.Now().UnixNano())
-	randomImage := images[rand.Intn(len(images))]
+    rand.Seed(time.Now().UnixNano())
+    randomImage := images[rand.Intn(len(images))]
 
-	http.ServeFile(w, r, "./images/"+randomImage)
+    // Send only the image file name without the path
+    w.Write([]byte(randomImage))
 }
+
